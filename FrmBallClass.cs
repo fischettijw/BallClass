@@ -27,19 +27,20 @@ namespace BallClass
             BallColor = Brushes.Red;
             this.Paint += FrmBallClass_Paint;
 
-            Ball = new BouncingBall(this.CreateGraphics(), this, 100, 100, 2, 2, 50, BallColor);
+
+            Ball = new BouncingBall(this, 100, 100, 5, 2, 50, BallColor);
 
             Draw = new Timer();
             Draw.Interval = 10;
             Draw.Tick += Draw_Tick;
             Draw.Enabled = true;
-
         }
 
         private void FrmBallClass_Paint(object sender, PaintEventArgs e)
         {
+            this.BackColor = SystemColors.Control;
             e.Graphics.SmoothingMode = SmoothingMode.HighQuality;
-            Ball.Display();
+            Ball.Display(e.Graphics);
             Ball.Update();
         }
 
@@ -56,9 +57,9 @@ public class BouncingBall
 {
     private int y, x, dy, dx, size;
     private Brush ballColor;
-    private Graphics g;
     private Form frm;
-    public BouncingBall(Graphics g, Form frm, int x, int y, int dx, int dy, int size, Brush ballColor)
+
+    public BouncingBall(Form frm, int x, int y, int dx, int dy, int size, Brush ballColor)
     {
         this.x = x;
         this.y = y;
@@ -66,13 +67,12 @@ public class BouncingBall
         this.dx = dx;
         this.size = size;
         this.ballColor = ballColor;
-        this.g = g;
         this.frm = frm;
     }
 
-    public void Display()
+    public void Display(Graphics g)
     {
-        frm.BackColor = Color.AntiqueWhite;
+        frm.BackColor = SystemColors.Control;
         g.FillEllipse(ballColor, x, y, size, size);
     }
 
