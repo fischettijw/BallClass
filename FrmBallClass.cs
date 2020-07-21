@@ -13,6 +13,9 @@ namespace BallClass
 {
     public partial class FrmBallClass : Form
     {
+        Timer Draw;
+        BouncingBall Ball;
+        Brush BallColor;
         public FrmBallClass()
         {
             InitializeComponent();
@@ -20,8 +23,31 @@ namespace BallClass
 
         private void FrmBallClass_Load(object sender, EventArgs e)
         {
+            this.DoubleBuffered = true;
+            BallColor = Brushes.Red;
+            this.Paint += FrmBallClass_Paint;
+
+            Ball = new BouncingBall(this.CreateGraphics(), this, 100, 100, 2, 2, 50, BallColor);
+
+            Draw = new Timer();
+            Draw.Interval = 10;
+            Draw.Tick += Draw_Tick;
+            Draw.Enabled = true;
 
         }
+
+        private void FrmBallClass_Paint(object sender, PaintEventArgs e)
+        {
+            e.Graphics.SmoothingMode = SmoothingMode.HighQuality;
+            Ball.Display();
+            Ball.Update();
+        }
+
+        private void Draw_Tick(object sender, EventArgs e)
+        {
+            this.Refresh();
+        }
+
     }
 }
 
@@ -46,7 +72,9 @@ public class BouncingBall
 
     public void Display()
     {
+        frm.BackColor = Color.AntiqueWhite;
         g.FillEllipse(ballColor, x, y, size, size);
+
     }
 
     public void Update()
