@@ -27,7 +27,6 @@ namespace BallClass
             BallColor = Brushes.Red;
             this.Paint += FrmBallClass_Paint;
 
-
             Ball = new BouncingBall(this, 100, 100, 5, 2, 50, BallColor);
 
             Draw = new Timer();
