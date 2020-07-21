@@ -15,7 +15,7 @@ namespace BallClass
     {
         Timer Draw;
         BouncingBall Ball;
-        BouncingBall[] Balls = new BouncingBall[100];
+        BouncingBall[] Balls = new BouncingBall[1000];
         Brush BallColor;
         public FrmBallClass()
         {
@@ -25,16 +25,17 @@ namespace BallClass
         private void FrmBallClass_Load(object sender, EventArgs e)
         {
             this.DoubleBuffered = true;
-            BallColor = Brushes.Red;
+            BallColor = Brushes.Black;
             this.Paint += FrmBallClass_Paint;
 
-            Ball = new BouncingBall(this, 100, 100, 5, 2, 50, BallColor);
+            Ball = new BouncingBall(this, 100, 100, 5, 2, 100, BallColor);
 
             Random rnd = new Random();
             for (int i = 0; i < Balls.Length; i++)
             {
                 Balls[i] = new BouncingBall(this, rnd.Next(0, 1000), rnd.Next(0, 500), rnd.Next(2, 10), rnd.Next(2, 10), rnd.Next(20, 100), new System.Drawing.SolidBrush(Color.FromArgb(rnd.Next(50, 255), rnd.Next(50, 255), rnd.Next(50, 255))));
             }
+            this.Text = $"Bouncing Class via Ball Class  ({Balls.Length} balls)";
 
             Draw = new Timer();
             Draw.Interval = 10;
@@ -57,6 +58,9 @@ namespace BallClass
                 ball.Display(e.Graphics);
                 ball.Update();
             }
+
+            Ball.Display(e.Graphics);
+            Ball.Update();
         }
     }
 }
