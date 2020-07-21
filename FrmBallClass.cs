@@ -74,7 +74,6 @@ public class BouncingBall
     {
         frm.BackColor = Color.AntiqueWhite;
         g.FillEllipse(ballColor, x, y, size, size);
-
     }
 
     public void Update()
