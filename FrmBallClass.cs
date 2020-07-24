@@ -34,12 +34,12 @@ namespace BallClass
 
             for (int i = 0; i < Balls.Length; i++)
             {
-                int w;
+                int dir;
                 Balls[i] = new BouncingBall(this,
                                             rnd.Next(0, this.ClientRectangle.Width - 150),
                                             rnd.Next(0, this.ClientRectangle.Height - 150),
-                                            ((w = rnd.Next(0, 20)) - 10) == 0 ? -1 * rnd.Next(3, 20) : w,
-                                            ((w = rnd.Next(0, 20)) - 10) == 0 ? -1 * rnd.Next(3, 20) : w,
+                                            ((dir = rnd.Next(0, 20)) - 10) == 0 ? -1 * rnd.Next(3, 20) : dir,
+                                            ((dir = rnd.Next(0, 20)) - 10) == 0 ? -1 * rnd.Next(3, 20) : dir,
                                             rnd.Next(35, 150),
                                             new System.Drawing.SolidBrush(Color.FromArgb(rnd.Next(50, 255),
                                                                     rnd.Next(50, 255), rnd.Next(50, 255))));
