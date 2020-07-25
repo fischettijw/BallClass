@@ -71,7 +71,6 @@ namespace BallClass
 
             BallMaster.Display(e.Graphics);
             BallMaster.Update();
-
         }
     }
 }
