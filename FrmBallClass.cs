@@ -16,7 +16,7 @@ namespace BallClass
         Timer Draw;
         BouncingBall BallMaster;
         BouncingBall[] Balls = new BouncingBall[300];
-        Brush BallColor;
+
         public FrmBallClass()
         {
             InitializeComponent();
@@ -25,25 +25,12 @@ namespace BallClass
         private void FrmBallClass_Load(object sender, EventArgs e)
         {
             this.DoubleBuffered = true;
-            BallColor = Brushes.Black;
             this.Paint += FrmBallClass_Paint;
+            this.BackColor = SystemColors.Control;
 
-            BallMaster = new BouncingBall(this, this.ClientRectangle.Width / 2, this.ClientRectangle.Height / 2, 10, 10, 250, BallColor);
+            BallMaster = new BouncingBall(this, this.ClientRectangle.Width / 2, this.ClientRectangle.Height / 2, 10, 10, 250, Brushes.Black);
 
-            Random rnd = new Random((int)DateTime.Now.Ticks);
-
-            for (int i = 0; i < Balls.Length; i++)
-            {
-                int dir;
-                Balls[i] = new BouncingBall(this,
-                                            rnd.Next(0, this.ClientRectangle.Width - 150),
-                                            rnd.Next(0, this.ClientRectangle.Height - 150),
-                                            ((dir = rnd.Next(0, 20)) - 10) == 0 ? -1 * rnd.Next(3, 20) : dir,
-                                            ((dir = rnd.Next(0, 20)) - 10) == 0 ? -1 * rnd.Next(3, 20) : dir,
-                                            rnd.Next(35, 150),
-                                            new System.Drawing.SolidBrush(Color.FromArgb(rnd.Next(50, 255),
-                                                                    rnd.Next(50, 255), rnd.Next(50, 255))));
-            }
+            BouncingBall.CreateBalls(ref Balls, this);
 
             this.Text = $"Bouncing Class via Ball Class  ({Balls.Length} balls)";
 
@@ -60,7 +47,6 @@ namespace BallClass
 
         private void FrmBallClass_Paint(object sender, PaintEventArgs e)
         {
-            this.BackColor = SystemColors.Control;
             e.Graphics.SmoothingMode = SmoothingMode.HighQuality;
 
             foreach (BouncingBall ball in Balls)
@@ -110,7 +96,6 @@ public class BouncingBall
 
     public void Display(Graphics g)
     {
-        frm.BackColor = SystemColors.Control;
         g.FillEllipse(ballColor, x, y, size, size);
 
         StringFormat sf = new StringFormat();
@@ -156,4 +141,23 @@ public class BouncingBall
         }
         return false;
     }
+
+    public static void CreateBalls(ref BouncingBall[] balls, Form frm)
+    {
+        Random rnd = new Random((int)DateTime.Now.Ticks);
+
+        for (int i = 0; i < balls.Length; i++)
+        {
+            int dir;
+            balls[i] = new BouncingBall(frm,
+                                        rnd.Next(0, frm.ClientRectangle.Width - 150),
+                                        rnd.Next(0, frm.ClientRectangle.Height - 150),
+                                        ((dir = rnd.Next(0, 20)) - 10) == 0 ? -1 * rnd.Next(3, 20) : dir,
+                                        ((dir = rnd.Next(0, 20)) - 10) == 0 ? -1 * rnd.Next(3, 20) : dir,
+                                        rnd.Next(35, 150),
+                                        new System.Drawing.SolidBrush(Color.FromArgb(rnd.Next(50, 255),
+                                                                rnd.Next(50, 255), rnd.Next(50, 255))));
+        }
+    }
+
 }
