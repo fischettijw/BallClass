@@ -15,7 +15,7 @@ namespace BallClass
     {
         Timer Draw;
         BouncingBall BallMaster;
-        BouncingBall[] Balls = new BouncingBall[300];
+        BouncingBall[] Balls = new BouncingBall[1000];
 
         public FrmBallClass()
         {
@@ -30,7 +30,7 @@ namespace BallClass
 
             BallMaster = new BouncingBall(this, this.ClientRectangle.Width / 2, this.ClientRectangle.Height / 2, 10, 10, 250, Brushes.Black);
 
-            BouncingBall.CreateBalls(ref Balls, this);
+            BouncingBall.CreateBalls(Balls, this);
 
             this.Text = $"Bouncing Class via Ball Class  ({Balls.Length} balls)";
 
@@ -56,20 +56,23 @@ namespace BallClass
                 ball.Update();
             }
 
-            BallMaster.Display(e.Graphics);
-            BallMaster.Update();
+            //BallMaster.Display(e.Graphics);
+            //BallMaster.Update();
         }
 
         public void OverrideClassGraphic(Graphics g, BouncingBall ball)
         {
-            g.FillRectangle(ball.BallColor, ball.X, ball.Y, ball.Size, ball.Size);
+            g.FillEllipse(ball.BallColor, ball.X, ball.Y, ball.Size, ball.Size);
+            g.FillEllipse(Brushes.Black, ball.X + (ball.Size / 8), ball.Y + (ball.Size / 8), ball.Size / 4, ball.Size / 4);
+            g.FillEllipse(Brushes.Black, ball.X + (ball.Size / 2), ball.Y + (ball.Size / 8), ball.Size / 4, ball.Size / 4);
+            g.FillEllipse(Brushes.Black, ball.X + (ball.Size / 4), ball.Y + (ball.Size / 2), ball.Size / 6, ball.Size / 6);
 
-            StringFormat sf = new StringFormat();
-            sf.Alignment = StringAlignment.Center;
-            sf.LineAlignment = StringAlignment.Center;
+            //StringFormat sf = new StringFormat();
+            //sf.Alignment = StringAlignment.Center;
+            //sf.LineAlignment = StringAlignment.Center;
 
-            g.DrawString($"{ball.Size}", new Font("Courier", 18), new SolidBrush(Color.White),
-                              ball.X + ball.Size / 2, ball.Y + ball.Size / 2, sf);
+            //g.DrawString($"{ball.Size}", new Font("Courier", 18), new SolidBrush(Color.Red),
+            //                  ball.X + ball.Size / 2, ball.Y + ball.Size / 2, sf);
         }
     }
 }
@@ -77,29 +80,21 @@ namespace BallClass
 
 public class BouncingBall
 {
-    int y, x, dy, dx, size;
+    int x, y, dx, dy, size;
     private Brush ballColor;
     private Form frm;
 
-    public int X
-    {
-        get { return x; }
-    }
+    public int X { get { return x; } }
 
-    public int Y
-    {
-        get { return y; }
-    }
+    public int Y { get { return y; } }
 
-    public int Size
-    {
-        get { return size; }
-    }
+    public int DX { get { return x; } }
 
-    public Brush BallColor
-    {
-        get { return ballColor; }
-    }
+    public int DY { get { return y; } }
+
+    public int Size { get { return size; } }
+
+    public Brush BallColor { get { return ballColor; } }
 
     public BouncingBall(Form frm, int x, int y, int dx, int dy, int size, Brush ballColor)
     {
@@ -124,9 +119,9 @@ public class BouncingBall
                           this.x + this.size / 2, this.y + this.size / 2, sf);
     }
 
-    public void Display(Graphics g, Action<Graphics, BouncingBall> dp)
+    public void Display(Graphics g, Action<Graphics, BouncingBall> customDisplay)
     {
-        dp(g, this);
+        customDisplay(g, this);
     }
 
     public void Update()
@@ -165,7 +160,7 @@ public class BouncingBall
         return false;
     }
 
-    public static void CreateBalls(ref BouncingBall[] balls, Form frm)
+    public static void CreateBalls(BouncingBall[] balls, Form frm)
     {
         Random rnd = new Random((int)DateTime.Now.Ticks);
 
