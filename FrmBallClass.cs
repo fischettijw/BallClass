@@ -51,12 +51,25 @@ namespace BallClass
 
             foreach (BouncingBall ball in Balls)
             {
-                ball.Display(e.Graphics);
+                //ball.Display(e.Graphics);
+                ball.Display(e.Graphics, OverrideClassGraphic);
                 ball.Update();
             }
 
             BallMaster.Display(e.Graphics);
             BallMaster.Update();
+        }
+
+        public void OverrideClassGraphic(Graphics g, BouncingBall ball)
+        {
+            g.FillRectangle(ball.BallColor, ball.X, ball.Y, ball.Size, ball.Size);
+
+            StringFormat sf = new StringFormat();
+            sf.Alignment = StringAlignment.Center;
+            sf.LineAlignment = StringAlignment.Center;
+
+            g.DrawString($"{ball.Size}", new Font("Courier", 18), new SolidBrush(Color.White),
+                              ball.X + ball.Size / 2, ball.Y + ball.Size / 2, sf);
         }
     }
 }
@@ -64,7 +77,7 @@ namespace BallClass
 
 public class BouncingBall
 {
-    private int y, x, dy, dx, size;
+    int y, x, dy, dx, size;
     private Brush ballColor;
     private Form frm;
 
@@ -83,6 +96,11 @@ public class BouncingBall
         get { return size; }
     }
 
+    public Brush BallColor
+    {
+        get { return ballColor; }
+    }
+
     public BouncingBall(Form frm, int x, int y, int dx, int dy, int size, Brush ballColor)
     {
         this.x = x;
@@ -96,7 +114,7 @@ public class BouncingBall
 
     public void Display(Graphics g)
     {
-        g.FillEllipse(ballColor, x, y, size, size);
+        g.FillEllipse(this.ballColor, this.x, this.y, this.size, this.size);
 
         StringFormat sf = new StringFormat();
         sf.Alignment = StringAlignment.Center;
@@ -104,6 +122,11 @@ public class BouncingBall
 
         g.DrawString($"{this.size}", new Font("Courier", 18), new SolidBrush(Color.White),
                           this.x + this.size / 2, this.y + this.size / 2, sf);
+    }
+
+    public void Display(Graphics g, Action<Graphics, BouncingBall> dp)
+    {
+        dp(g, this);
     }
 
     public void Update()
