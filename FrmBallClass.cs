@@ -28,7 +28,9 @@ namespace BallClass
             this.Paint += FrmBallClass_Paint;
             this.BackColor = SystemColors.Control;
 
-            BallMaster = new BouncingBall(this, this.ClientRectangle.Width / 2, this.ClientRectangle.Height / 2, 10, 10, 250, Brushes.Black);
+            this.MouseClick += FrmBallClass_MouseClick;
+
+            //BallMaster = new BouncingBall(this, this.ClientRectangle.Width / 2, this.ClientRectangle.Height / 2, 10, 10, 250, Brushes.Black);
 
             BouncingBall.CreateBalls(Balls, this);
 
@@ -40,6 +42,11 @@ namespace BallClass
             Draw.Enabled = true;
         }
 
+        private void FrmBallClass_MouseClick(object sender, MouseEventArgs e)
+        {
+            MessageBox.Show(e.X + "  -  " + e.Y);
+        }
+
         private void Draw_Tick(object sender, EventArgs e)
         {
             this.Refresh();
@@ -49,10 +56,11 @@ namespace BallClass
         {
             e.Graphics.SmoothingMode = SmoothingMode.HighQuality;
 
+
             foreach (BouncingBall ball in Balls)
             {
-                //ball.Display(e.Graphics);
-                ball.Display(e.Graphics, OverrideClassGraphic);
+                ball.Display(e.Graphics);
+                //ball.Display(e.Graphics, OverrideClassGraphic);
                 ball.Update();
             }
 
@@ -70,9 +78,12 @@ namespace BallClass
             //StringFormat sf = new StringFormat();
             //sf.Alignment = StringAlignment.Center;
             //sf.LineAlignment = StringAlignment.Center;
-
             //g.DrawString($"{ball.Size}", new Font("Courier", 18), new SolidBrush(Color.Red),
             //                  ball.X + ball.Size / 2, ball.Y + ball.Size / 2, sf);
+
+
+            //g.DrawString($"{ball.Size}", new Font("Courier", 18), new SolidBrush(Color.Red),
+            //                  ball.X + ball.Size / 2, ball.Y + ball.Size / 2);
         }
     }
 }
@@ -111,12 +122,15 @@ public class BouncingBall
     {
         g.FillEllipse(this.ballColor, this.x, this.y, this.size, this.size);
 
-        StringFormat sf = new StringFormat();
-        sf.Alignment = StringAlignment.Center;
-        sf.LineAlignment = StringAlignment.Center;
-
         g.DrawString($"{this.size}", new Font("Courier", 18), new SolidBrush(Color.White),
-                          this.x + this.size / 2, this.y + this.size / 2, sf);
+                          this.x + this.size / 2, this.y + this.size / 2);
+
+        //StringFormat sf = new StringFormat();
+        //sf.Alignment = StringAlignment.Center;
+        //sf.LineAlignment = StringAlignment.Center;
+        //g.DrawString($"{this.size}", new Font("Courier", 18), new SolidBrush(Color.White),
+        //          this.x + this.size / 2, this.y + this.size / 2, sf);
+
     }
 
     public void Display(Graphics g, Action<Graphics, BouncingBall> customDisplay)
@@ -166,6 +180,8 @@ public class BouncingBall
 
         for (int i = 0; i < balls.Length; i++)
         {
+            //    public BouncingBall(Form frm, int x, int y, int dx, int dy, int size, Brush ballColor)
+
             int dir;
             balls[i] = new BouncingBall(frm,
                                         rnd.Next(0, frm.ClientRectangle.Width - 150),
@@ -175,6 +191,18 @@ public class BouncingBall
                                         rnd.Next(35, 150),
                                         new System.Drawing.SolidBrush(Color.FromArgb(rnd.Next(50, 255),
                                                                 rnd.Next(50, 255), rnd.Next(50, 255))));
+
+
+            //balls[i] = new BouncingBall(frm,
+            //                rnd.Next(0, frm.ClientRectangle.Width - 150),
+            //                rnd.Next(0, frm.ClientRectangle.Height - 150),
+            //                rnd.Next(2, 20),
+            //                rnd.Next(2, 20),
+            //                rnd.Next(35, 150),
+            //                new System.Drawing.SolidBrush(Color.FromArgb(rnd.Next(50, 255),
+            //                                        rnd.Next(50, 255), rnd.Next(50, 255))));
+
+
         }
     }
 
